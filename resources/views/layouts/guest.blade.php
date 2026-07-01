@@ -4,60 +4,46 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title ?? config('app.name', 'Artikel Wisata') }}</title>
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <title>{{ $title ?? config('app.name', 'Wanderlust') }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        .font-display { font-family: 'Playfair Display', serif; }
+        .font-body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="font-sans text-gray-900 antialiased">
+<body class="font-body antialiased">
 
-    <div class="min-h-screen flex">
+    {{-- Full-page background dengan blur --}}
+    <div class="min-h-screen relative flex items-center justify-center p-4 overflow-hidden">
 
-        {{-- Sisi kiri: ilustrasi / branding --}}
-        <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary-600 to-wisata-teal flex-col justify-center items-center p-12 text-white">
-            <a href="{{ route('home') }}" class="flex items-center gap-3 mb-8">
-                <span class="text-5xl">🌏</span>
-                <span class="text-3xl font-bold">Artikel Wisata</span>
-            </a>
-            <p class="text-center text-primary-100 text-lg leading-relaxed max-w-sm">
-                Jelajahi keindahan destinasi wisata nusantara. Pantai, gunung, sejarah, kuliner — semua ada di sini.
-            </p>
-            <div class="mt-10 grid grid-cols-2 gap-4 text-center">
-                <div class="bg-white/10 rounded-xl p-4">
-                    <div class="text-3xl mb-1">🏖️</div>
-                    <div class="text-sm font-medium">Pantai</div>
-                </div>
-                <div class="bg-white/10 rounded-xl p-4">
-                    <div class="text-3xl mb-1">🏔️</div>
-                    <div class="text-sm font-medium">Gunung</div>
-                </div>
-                <div class="bg-white/10 rounded-xl p-4">
-                    <div class="text-3xl mb-1">🏛️</div>
-                    <div class="text-sm font-medium">Sejarah</div>
-                </div>
-                <div class="bg-white/10 rounded-xl p-4">
-                    <div class="text-3xl mb-1">🍜</div>
-                    <div class="text-sm font-medium">Kuliner</div>
-                </div>
-            </div>
+        {{-- Background image --}}
+        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
+             style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80')">
         </div>
+        {{-- Blur + dark overlay --}}
+        <div class="absolute inset-0 backdrop-blur-sm bg-black/40"></div>
 
-        {{-- Sisi kanan: form --}}
-        <div class="flex-1 flex flex-col justify-center items-center p-6 sm:p-12 bg-gray-50">
-            {{-- Logo mobile --}}
-            <a href="{{ route('home') }}" class="lg:hidden flex items-center gap-2 text-primary-600 font-bold text-xl mb-8">
-                <span class="text-3xl">🌏</span>
-                <span>Artikel Wisata</span>
-            </a>
+        {{-- Form Card --}}
+        <div class="relative z-10 w-full max-w-md">
 
-            <div class="w-full max-w-md">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 px-8 py-8">
-                    {{ $slot }}
-                </div>
-                <p class="text-center text-xs text-gray-400 mt-4">
-                    &copy; {{ date('Y') }} Artikel Wisata
-                </p>
+            {{-- Logo --}}
+            <div class="text-center mb-8">
+                <a href="{{ route('home') }}"
+                   class="font-display font-bold text-3xl text-white tracking-wide">
+                    Wanderlust
+                </a>
             </div>
+
+            {{-- Card --}}
+            <div class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl px-8 py-8">
+                {{ $slot }}
+            </div>
+
+            <p class="text-center text-xs text-white/50 mt-6">
+                &copy; {{ date('Y') }} Wanderlust Editorial. All rights reserved.
+            </p>
         </div>
     </div>
 

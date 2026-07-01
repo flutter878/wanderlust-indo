@@ -39,9 +39,22 @@ Route::middleware('auth')->group(function () {
 
 // ── Admin ─────────────────────────────────────────────────────────────────────
 Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    // Dashboard
+    Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+
+    // Artikel (CRUD)
+    Route::resource('articles', App\Http\Controllers\Admin\ArticleController::class)
+        ->except(['show']);
+
+    // Komentar (moderasi)
+    Route::get('/comments', [App\Http\Controllers\Admin\CommentController::class, 'index'])->name('comments.index');
+    Route::delete('/comments/{comment}', [App\Http\Controllers\Admin\CommentController::class, 'destroy'])->name('comments.destroy');
+
+    // Kategori (CRUD via satu halaman)
+    Route::get('/categories', [App\Http\Controllers\Admin\CategoryController::class, 'index'])->name('categories.index');
+    Route::post('/categories', [App\Http\Controllers\Admin\CategoryController::class, 'store'])->name('categories.store');
+    Route::put('/categories/{category}', [App\Http\Controllers\Admin\CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{category}', [App\Http\Controllers\Admin\CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
 require __DIR__ . '/auth.php';

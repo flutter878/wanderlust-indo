@@ -1,26 +1,30 @@
-<article class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col">
+<article class="group relative rounded-2xl overflow-hidden bg-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer">
 
-    {{-- Thumbnail --}}
-    <a href="{{ route('articles.show', $article->slug) }}" class="block aspect-video overflow-hidden bg-gradient-to-br from-primary-100 to-wisata-teal/20">
+    {{-- Thumbnail wrapper --}}
+    <a href="{{ route('articles.show', $article->slug) }}" class="block aspect-[335/376] relative overflow-hidden">
         @if($article->thumbnail)
             <img src="{{ Storage::url($article->thumbnail) }}"
                  alt="{{ $article->title }}"
-                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
         @else
-            <div class="w-full h-full flex items-center justify-center text-5xl">
-                {{ $article->category->icon ?? '🌏' }}
+            <div class="w-full h-full bg-gradient-to-br from-sky-100 to-sky-200 flex items-center justify-center">
+                <span class="text-6xl opacity-50">{{ $article->category->icon ?? '🌏' }}</span>
             </div>
         @endif
-    </a>
 
-    <div class="p-4 flex-1 flex flex-col">
-        {{-- Kategori & Views --}}
-        <div class="flex items-center justify-between mb-2">
-            <a href="{{ route('articles.search', ['category' => $article->category->slug]) }}"
-                class="text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full hover:bg-primary-100 transition-colors">
-                {{ $article->category->icon }} {{ $article->category->name }}
-            </a>
-            <span class="text-xs text-gray-400 flex items-center gap-1">
+        {{-- Gradient overlay --}}
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+
+        {{-- Category pill — top left --}}
+        <div class="absolute top-3 left-3">
+            <span class="inline-flex items-center gap-1 bg-sky-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow">
+                {{ $article->category->name }}
+            </span>
+        </div>
+
+        {{-- Views — top right --}}
+        <div class="absolute top-3 right-3">
+            <span class="flex items-center gap-1 bg-black/30 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -29,24 +33,26 @@
             </span>
         </div>
 
-        {{-- Judul --}}
-        <h3 class="font-bold text-gray-800 text-sm leading-snug mb-2 line-clamp-2">
-            <a href="{{ route('articles.show', $article->slug) }}"
-                class="hover:text-primary-600 transition-colors">
-                {{ $article->title }}
-            </a>
-        </h3>
+        {{-- Bottom info overlay --}}
+        <div class="absolute bottom-0 left-0 right-0 p-4">
+            {{-- Location --}}
+            @if($article->location_name)
+                <div class="flex items-center gap-1 text-white/70 text-xs mb-1.5">
+                    <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    </svg>
+                    <span class="truncate">{{ $article->location_name }}</span>
+                </div>
+            @endif
 
-        {{-- Lokasi --}}
-        @if($article->location_name)
-            <p class="text-xs text-gray-500 flex items-center gap-1 mt-auto pt-2 border-t border-gray-50">
-                <svg class="w-3 h-3 text-wisata-teal flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-                {{ $article->location_name }}
-            </p>
-        @endif
-    </div>
+            {{-- Title --}}
+            <h3 class="font-display font-bold text-white text-base leading-snug line-clamp-2">
+                {{ $article->title }}
+            </h3>
+
+            {{-- Date --}}
+            <p class="text-white/50 text-xs mt-1.5">{{ $article->created_at->format('d M Y') }}</p>
+        </div>
+    </a>
+
 </article>
